@@ -8,7 +8,8 @@
   },
   "scripts": {
     "start": "node cli.js XXVIII",
-    "test": "node test.js"
+    "test": "node test.js",
+    "analyze": "node analyze.js parliament_absences_XXVIII.json"
   },
   "dependencies": {
     "jsdom": "^24.0.0"

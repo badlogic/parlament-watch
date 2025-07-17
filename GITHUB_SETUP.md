@@ -92,8 +92,8 @@ ssh -i ~/.ssh/id_rsa username@your-server.com
 Make sure the target directory exists and has proper permissions:
 ```bash
 ssh username@your-server.com
-mkdir -p /home/badlogic/mariozechner.at/html/projects/parlament-absences
-chmod 755 /home/badlogic/mariozechner.at/html/projects/parlament-absences
+mkdir -p /home/badlogic/mariozechner.at/html/projects/parliament-watch
+chmod 755 /home/badlogic/mariozechner.at/html/projects/parliament-watch
 ```
 
 ### Step 6: Test the Workflow
@@ -108,8 +108,8 @@ You can manually trigger the workflow from GitHub:
 - **Schedule**: Runs every night at 2 AM UTC
 - **Output**: 
   - `index.html` → Main report page (JSON data embedded with download button)
-- **Upload Location**: `/home/badlogic/mariozechner.at/html/projects/parlament-absences/`
-- **URL**: `https://mariozechner.at/projects/parlament-absences/`
+- **Upload Location**: `/home/badlogic/mariozechner.at/html/projects/parliament-watch/`
+- **URL**: `https://mariozechner.at/projects/parliament-watch/`
 
 ## Troubleshooting
 

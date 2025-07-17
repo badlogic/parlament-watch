@@ -38,8 +38,8 @@ jobs:
         
     - name: Create remote directory and upload HTML
       run: |
-        ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} "mkdir -p /home/badlogic/mariozechner.at/html/projects/parlament-absences"
-        scp index.html ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/home/badlogic/mariozechner.at/html/projects/parlament-absences/
+        ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} "mkdir -p /home/badlogic/mariozechner.at/html/projects/parliament-watch"
+        scp index.html ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/home/badlogic/mariozechner.at/html/projects/parliament-watch/
         
     - name: Cleanup SSH key
       if: always()

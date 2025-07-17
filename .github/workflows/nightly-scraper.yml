@@ -1,0 +1,49 @@
+name: Nightly Parliament Absence Scraper
+
+on:
+  schedule:
+    # Run every night at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  scrape-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run scraper
+      run: node cli.js XXVIII
+      
+    - name: Rename HTML file
+      run: mv parliament_absences_XXVIII.html index.html
+      
+    - name: Setup SSH key
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ secrets.HOST }} >> ~/.ssh/known_hosts
+        
+    - name: Create remote directory and upload files
+      run: |
+        ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} "mkdir -p /home/badlogic/mariozechner.at/html/projects/parlament-absences"
+        scp index.html ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/home/badlogic/mariozechner.at/html/projects/parlament-absences/
+        scp parliament_absences_XXVIII.json ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/home/badlogic/mariozechner.at/html/projects/parlament-absences/
+        
+    - name: Cleanup
+      run: |
+        rm -f ~/.ssh/id_rsa
+        rm -f index.html
+        rm -f parliament_absences_XXVIII.json

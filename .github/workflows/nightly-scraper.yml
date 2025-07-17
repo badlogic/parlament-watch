@@ -36,14 +36,12 @@ jobs:
         chmod 600 ~/.ssh/id_rsa
         ssh-keyscan -H ${{ secrets.HOST }} >> ~/.ssh/known_hosts
         
-    - name: Create remote directory and upload files
+    - name: Create remote directory and upload HTML
       run: |
         ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} "mkdir -p /home/badlogic/mariozechner.at/html/projects/parlament-absences"
         scp index.html ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/home/badlogic/mariozechner.at/html/projects/parlament-absences/
-        scp parliament_absences_XXVIII.json ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/home/badlogic/mariozechner.at/html/projects/parlament-absences/
         
-    - name: Cleanup
+    - name: Cleanup SSH key
+      if: always()
       run: |
         rm -f ~/.ssh/id_rsa
-        rm -f index.html
-        rm -f parliament_absences_XXVIII.json

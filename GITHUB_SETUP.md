@@ -4,6 +4,26 @@
 
 To allow GitHub Actions to access your server, you need to configure SSH key authentication and add secrets to your GitHub repository.
 
+## Security Notes
+
+This workflow uses native SSH/SCP commands with these security measures:
+- ✅ SSH key is written to runner's temporary filesystem only
+- ✅ Key file has proper permissions (600)
+- ✅ SSH host key verification via ssh-keyscan
+- ✅ Automatic cleanup with `if: always()` to ensure key removal
+- ✅ No third-party actions handling your private key
+
+**Key Security Practices:**
+- Private key never leaves GitHub's secure secrets storage and the ephemeral runner
+- Runner is destroyed after job completion
+- Use dedicated SSH key only for this deployment (not your personal key)
+- Consider IP restrictions on your server if possible
+
+**Alternative approaches if you want even more security:**
+- **Webhook**: Have your server pull from GitHub instead of pushing from GitHub
+- **Deployment environments**: Use GitHub's deployment environments with approval workflows
+- **Cloud-native**: Upload to cloud storage then sync to server
+
 ### Step 1: Generate SSH Key Pair (if you don't have one)
 
 On your local machine or server:
@@ -28,6 +48,21 @@ chmod 600 ~/.ssh/authorized_keys
 ```
 
 ### Step 3: Add GitHub Repository Secrets
+
+#### Option A: Using GitHub CLI (Recommended)
+
+```bash
+# Set your server hostname
+gh secret set HOST --body "mariozechner.at"
+
+# Set your SSH username
+gh secret set USERNAME --body "badlogic"
+
+# Set your SSH private key (will prompt for input)
+gh secret set SSH_PRIVATE_KEY < ~/.ssh/id_rsa
+```
+
+#### Option B: Using GitHub Web Interface
 
 Go to your GitHub repository → Settings → Secrets and variables → Actions
 
@@ -72,8 +107,7 @@ You can manually trigger the workflow from GitHub:
 
 - **Schedule**: Runs every night at 2 AM UTC
 - **Output**: 
-  - `index.html` → Main report page
-  - `parliament_absences_XXVIII.json` → Raw data
+  - `index.html` → Main report page (JSON data embedded with download button)
 - **Upload Location**: `/home/badlogic/mariozechner.at/html/projects/parlament-absences/`
 - **URL**: `https://mariozechner.at/projects/parlament-absences/`
 

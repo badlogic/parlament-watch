@@ -408,7 +408,7 @@ function generateHTML(jsonData, outputFile = 'parliament_absences.html', activeM
         .party-unknown { background: #6c757d; }
         
         .footer {
-            margin-top: 40px;
+            margin-top: 20px;
             padding: 20px 0;
             display: flex;
             flex-direction: column;
@@ -428,6 +428,25 @@ function generateHTML(jsonData, outputFile = 'parliament_absences.html', activeM
         
         .footer-item a:hover {
             text-decoration: underline;
+        }
+        
+        .download-btn {
+            background: #d32f2f;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+        
+        .download-btn:hover {
+            background: #b71c1c;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
         }
         
         @media (max-width: 768px) {
@@ -509,6 +528,9 @@ function generateHTML(jsonData, outputFile = 'parliament_absences.html', activeM
         
         <div class="footer">
             <div class="footer-item">
+                <button class="download-btn" onclick="downloadJSON()">Download JSON</button>
+            </div>
+            <div class="footer-item">
                 Diese Seite respektiert Ihre Privatsphäre durch den Verzicht auf Cookies oder ähnliche Technologien und sammelt keine personenbezogenen Daten.
             </div>
             <div class="footer-item">
@@ -580,6 +602,20 @@ function generateHTML(jsonData, outputFile = 'parliament_absences.html', activeM
                 'Unknown': '#6c757d'
             };
             return colors[party] || '#6c757d';
+        }
+        
+        function downloadJSON() {
+            const jsonString = JSON.stringify(data, null, 2);
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'parlament-absences.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
         
         // Initialize

@@ -500,6 +500,7 @@ function generateHTML(jsonData, outputFile = 'parliament_absences.html', activeM
             <p><strong>Abwesenheitsgründe:</strong> Abwesenheiten können verschiedene Gründe haben, wie Krankheit, offizielle Termine, oder andere berechtigte Verpflichtungen.</p>
             <p><strong>Datenqualität:</strong> Die automatische Extraktion der Daten kann Fehler enthalten. Jede Abwesenheit kann durch Klick auf die entsprechende Sitzung im stenographischen Protokoll überprüft werden.</p>
             <p><strong>Verifikation:</strong> Klicken Sie auf die orangen Sitzungspunkte, um das offizielle Protokoll zu öffnen und die Abwesenheit zu bestätigen.</p>
+            <p><strong>Legislaturperiode:</strong> Die Daten beziehen sich auf die aktuelle XXVIII. Legislaturperiode (Oktober 2024 - Oktober 2029). Die Zahlen 1, 2, 3, 4 etc. pro Abgeordneter verweisen auf die 1., 2., 3., 4. usw. Sitzung in dieser Legislaturperiode.</p>
         </div>
         
         <div class="nav">

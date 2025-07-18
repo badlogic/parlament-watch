@@ -334,6 +334,16 @@ function generateHTML(jsonData, outputFile = 'parliament_absences.html', activeM
             font-weight: 600;
         }
         
+        .party-chart-explainer {
+            margin-bottom: 12px;
+        }
+        
+        .party-chart-explainer p {
+            margin: 0;
+            font-size: 0.8em;
+            color: #6c757d;
+        }
+        
         .party-chart {
             display: flex;
             flex-direction: column;
@@ -517,7 +527,10 @@ function generateHTML(jsonData, outputFile = 'parliament_absences.html', activeM
         
         <div id="parties" class="section">
             <div class="party-overview">
-                <h3>Abwesenheiten nach Parteien</h3>
+                <h3>Durchschnittliche Abwesenheiten pro Abgeordnete/r pro Partei</h3>
+                <div class="party-chart-explainer">
+                    <p>Gesamtabwesenheiten der Partei ÷ Anzahl aller aktiven Abgeordneten der Partei</p>
+                </div>
                 <div class="party-chart">
                     ${generatePartyChart(partyStats)}
                 </div>
@@ -729,10 +742,10 @@ function processData(jsonData, activeMembersByParty = null) {
         memberCount: party.members.size,
         activeMembers: activeMembers,
         absentPercentage: absentPercentage,
-        averageAbsencesPerMember: party.totalAbsences / party.members.size
+        averageAbsencesPerMember: activeMembers > 0 ? party.totalAbsences / activeMembers : 0
       };
     })
-    .sort((a, b) => b.totalAbsences - a.totalAbsences);
+    .sort((a, b) => b.averageAbsencesPerMember - a.averageAbsencesPerMember);
   
   const sessionStats = {
     totalSessions: jsonData.length,
@@ -823,10 +836,10 @@ function generatePartyList(partyStats, personStats) {
 }
 
 function generatePartyChart(partyStats) {
-  const maxAbsences = Math.max(...partyStats.map(p => p.totalAbsences));
+  const maxAverageAbsences = Math.max(...partyStats.map(p => p.averageAbsencesPerMember));
   
   return partyStats.map(party => {
-    const barWidth = (party.totalAbsences / maxAbsences) * 100;
+    const barWidth = (party.averageAbsencesPerMember / maxAverageAbsences) * 100;
     const partyColor = getPartyColorJS(party.name);
     
     return `
@@ -834,7 +847,7 @@ function generatePartyChart(partyStats) {
         <div class="party-chart-label">${party.name}</div>
         <div class="party-chart-bar">
           <div class="party-chart-fill" style="width: ${barWidth}%; background-color: ${partyColor};"></div>
-          <div class="party-chart-text">${party.totalAbsences}</div>
+          <div class="party-chart-text">${party.averageAbsencesPerMember.toFixed(1)}</div>
         </div>
       </div>
     `;
